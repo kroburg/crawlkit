@@ -27,7 +27,7 @@ EXAMPLES = REPO / "examples"
 # (used where the example legitimately self-skips in a bare environment).
 EXPECTED = {
     "01_probe_a_rotting_list": "confirmed by rendering, not re-probed",
-    "02_clear_a_wall": ("exit code: 3", "SKIP: playwright not installed"),
+    "02_clear_a_wall": ("exit code: 3", "SKIP: no usable chromium"),
     "03_drive_a_harvest": "skipped 3",
     "04_plan_a_fanout": "crawlkit-item: book-1",
     "05_ingest_a_fanout": "OK: exactly 1 record landed",

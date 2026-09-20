@@ -9,8 +9,16 @@ CK_RENDER="$ROOT/.venv/bin/ck-render"
 
 : "${CRAWLKIT_FIXTURE:?set CRAWLKIT_FIXTURE=http://127.0.0.1:<port> — see examples/run_all.sh}"
 
-if ! "$PY" -c "import playwright" >/dev/null 2>&1; then
-  echo "SKIP: playwright not installed (pip install -e '.[browser]' && playwright install chromium)"
+# Probe by launching, not by importing. pip puts the python package in place
+# without downloading any browser, and headless mode resolves to a different
+# binary again, so `import playwright` succeeding proves nothing about whether
+# ck-render can start. Getting this wrong turns a skip into a stack trace.
+if ! "$PY" -c "
+from playwright.sync_api import sync_playwright
+with sync_playwright() as driver:
+    driver.chromium.launch(headless=True).close()
+" >/dev/null 2>&1; then
+  echo "SKIP: no usable chromium (pip install -e '.[browser]' && playwright install chromium)"
   exit 0
 fi
 

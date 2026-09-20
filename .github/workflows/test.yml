@@ -107,5 +107,8 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: "22" }
       - run: pip install -e '.[dev]'
+      # Without this the browser examples self-skip, and a job that skips the
+      # examples it exists to run is worth nothing.
+      - run: python -m playwright install --with-deps chromium
       - run: npm ci --prefix node
       - run: pytest -q tests/test_examples.py
