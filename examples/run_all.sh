@@ -6,6 +6,7 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 ROOT="$(cd .. && pwd)"
 PY="$ROOT/.venv/bin/python"
+[ -x "$PY" ] || PY="$(command -v python3)"
 
 LOG="$(mktemp)"
 SERVER_PID=""

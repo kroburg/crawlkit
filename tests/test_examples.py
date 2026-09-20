@@ -70,6 +70,30 @@ def test_every_example_directory_is_registered():
     assert names == set(EXPECTED), (names, set(EXPECTED))
 
 
+def test_no_example_reaches_into_the_virtualenv_without_a_fallback():
+    """An example that hardcodes `.venv/bin/...` runs here and nowhere else.
+
+    The suite cannot catch this by running them, because the developer's
+    virtualenv is exactly what the path resolves to. It surfaces on a machine
+    that installed the package some other way — a CI runner, or a reader
+    following the README — as exit 127 from a line nobody suspects.
+
+    So every mention of the virtualenv must be an assignment immediately
+    followed by a `command -v` fallback.
+    """
+    offenders = []
+    for script in sorted(EXAMPLES.glob("**/*.sh")):
+        lines = script.read_text(encoding="utf-8").splitlines()
+        for number, line in enumerate(lines):
+            if "/.venv/bin/" not in line:
+                continue
+            name = line.split("=", 1)[0].strip()
+            following = lines[number + 1] if number + 1 < len(lines) else ""
+            if not name.isidentifier() or "command -v" not in following:
+                offenders.append(f"{script.relative_to(REPO)}:{number + 1}: {line.strip()}")
+    assert not offenders, "virtualenv paths with no fallback:\n" + "\n".join(offenders)
+
+
 def test_run_all_script_exists_and_is_a_script():
     script = EXAMPLES / "run_all.sh"
     assert script.exists()

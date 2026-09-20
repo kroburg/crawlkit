@@ -4,6 +4,8 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 ROOT="$(cd ../.. && pwd)"
 CK_INGEST="$ROOT/.venv/bin/ck-ingest"
 [ -x "$CK_INGEST" ] || CK_INGEST="$(command -v ck-ingest)"
+PY="$ROOT/.venv/bin/python"
+[ -x "$PY" ] || PY="$(command -v python3)"
 
 rm -rf out
 mkdir -p out
@@ -24,7 +26,7 @@ echo
 echo "-- what landed --"
 cat out/records.json
 
-count=$("$ROOT/.venv/bin/python" -c "import json; print(len(json.load(open('out/records.json'))))")
+count=$("$PY" -c "import json; print(len(json.load(open('out/records.json'))))")
 if [ "$count" != "1" ]; then
   echo "expected exactly one record, got $count" >&2
   exit 1
