@@ -24,7 +24,15 @@ jobs:
       - run: ruff check .
       - run: ruff format --check .
       # The two guards that decide whether this repo is publishable at all.
+      #
+      # The names the first guard suppresses are supplied from outside the
+      # repository, because a guard that hardcodes them publishes them. This is
+      # empty on pull requests from forks — GitHub does not give them secrets —
+      # so there the guard runs on its generic patterns alone. That is expected,
+      # not a misconfiguration.
       - run: pytest -q tests/test_no_private_references.py tests/test_console_scripts.py
+        env:
+          CRAWLKIT_FORBIDDEN_NAMES: ${{ secrets.CRAWLKIT_FORBIDDEN_NAMES }}
 
   python:
     runs-on: ubuntu-latest
