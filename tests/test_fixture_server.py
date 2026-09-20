@@ -142,6 +142,7 @@ def test_idn_host_reaches_the_server_in_punycode(fixture_port, named_hosts):
 
 
 def test_media_requires_the_page_referer(fixture_http, fixture_port):
+    pytest.importorskip("PIL", reason="the media endpoints generate images on demand")
     ident = "aaaaaaaaaaaaaaaaaaaaaa1"
     assert _get(f"{fixture_http}/media/{ident}?w=1400")[0] == 403
     status, body, _ = _get(
@@ -153,6 +154,7 @@ def test_media_requires_the_page_referer(fixture_http, fixture_port):
 
 
 def test_media_serves_bigger_bytes_for_the_hi_res_width(fixture_http, fixture_port):
+    pytest.importorskip("PIL", reason="the media endpoints generate images on demand")
     ident = "aaaaaaaaaaaaaaaaaaaaaa1"
     ref = {"Referer": f"http://127.0.0.1:{fixture_port}/lazy-images"}
     small = _get(f"{fixture_http}/media/{ident}?w=800", headers=ref)[1]
@@ -161,6 +163,7 @@ def test_media_serves_bigger_bytes_for_the_hi_res_width(fixture_http, fixture_po
 
 
 def test_truncated_jpeg_has_no_end_marker_and_the_good_one_does(fixture_http):
+    pytest.importorskip("PIL", reason="the media endpoints generate images on demand")
     trunc = _get(f"{fixture_http}/media/trunc")[1]
     good = _get(f"{fixture_http}/media/good")[1]
     assert trunc[:2] == b"\xff\xd8" and trunc[-2:] != b"\xff\xd9"
