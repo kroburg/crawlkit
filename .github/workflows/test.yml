@@ -73,6 +73,10 @@ jobs:
         with: { node-version: "${{ matrix.node }}" }
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
+      # The node suite drives the python fixture server, whose media routes
+      # generate JPEGs. A python with no imaging library serves an error there,
+      # and it surfaces as a capture assertion failing for no visible reason.
+      - run: pip install -e '.[qa]'
       - run: npm ci --prefix node
       - run: node --test node/test/*.test.js
 
@@ -87,6 +91,7 @@ jobs:
         with: { python-version: "3.12" }
       - uses: browser-actions/setup-chrome@v1
         id: chrome
+      - run: pip install -e '.[qa]'
       - run: npm ci --prefix node
       - run: node --test node/test/*.test.js
         env:
