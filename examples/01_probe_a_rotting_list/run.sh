@@ -3,6 +3,7 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 ROOT="$(cd ../.. && pwd)"
 CK_PROBE="$ROOT/.venv/bin/ck-probe"
+[ -x "$CK_PROBE" ] || CK_PROBE="$(command -v ck-probe)"
 
 : "${CRAWLKIT_FIXTURE:?set CRAWLKIT_FIXTURE=http://127.0.0.1:<port> — see examples/run_all.sh}"
 

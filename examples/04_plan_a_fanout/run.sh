@@ -3,6 +3,7 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 ROOT="$(cd ../.. && pwd)"
 CK_PLAN="$ROOT/.venv/bin/ck-plan"
+[ -x "$CK_PLAN" ] || CK_PLAN="$(command -v ck-plan)"
 
 : "${CRAWLKIT_FIXTURE:?set CRAWLKIT_FIXTURE=http://127.0.0.1:<port> — see examples/run_all.sh}"
 

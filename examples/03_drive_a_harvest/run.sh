@@ -3,7 +3,9 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 ROOT="$(cd ../.. && pwd)"
 PY="$ROOT/.venv/bin/python"
+[ -x "$PY" ] || PY="$(command -v python3)"
 CK_DRIVE="$ROOT/.venv/bin/ck-drive"
+[ -x "$CK_DRIVE" ] || CK_DRIVE="$(command -v ck-drive)"
 
 : "${CRAWLKIT_FIXTURE:?set CRAWLKIT_FIXTURE=http://127.0.0.1:<port> — see examples/run_all.sh}"
 

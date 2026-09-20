@@ -28,10 +28,10 @@ test-bare: ## the suite on an interpreter without playwright or pillow
 	$(PYTEST) -q -m "not playwright and $(NOT_OPTIONAL)"
 
 test-node: ## the node suite
-	cd node && npm --silent ci && node --test test/
+	cd node && npm --silent ci && node --test test/*.test.js
 
 test-chrome: ## the node suite including the tests that need real Chrome
-	cd node && node --test test/
+	cd node && node --test test/*.test.js
 
 examples: ## every documented example, against the local fixture server
 	$(PYTEST) -q tests/test_examples.py

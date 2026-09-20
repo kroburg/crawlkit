@@ -3,6 +3,7 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 ROOT="$(cd ../.. && pwd)"
 CK_QA="$ROOT/.venv/bin/ck-qa"
+[ -x "$CK_QA" ] || CK_QA="$(command -v ck-qa)"
 
 rm -rf out
 mkdir -p out

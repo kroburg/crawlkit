@@ -3,8 +3,11 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 ROOT="$(cd ../.. && pwd)"
 PY="$ROOT/.venv/bin/python"
+[ -x "$PY" ] || PY="$(command -v python3)"
 CK_RECOVER="$ROOT/.venv/bin/ck-recover"
+[ -x "$CK_RECOVER" ] || CK_RECOVER="$(command -v ck-recover)"
 CK_INGEST="$ROOT/.venv/bin/ck-ingest"
+[ -x "$CK_INGEST" ] || CK_INGEST="$(command -v ck-ingest)"
 
 rm -rf out
 mkdir -p out

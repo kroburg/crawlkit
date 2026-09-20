@@ -4,7 +4,7 @@
   "private": true,
   "description": "Warm-profile browser harvesting: persistent session reuse, same-origin API calls, credentialed media capture",
   "scripts": {
-    "test": "node --test test/"
+    "test": "node --test test/*.test.js"
   },
   "dependencies": {
     "puppeteer-core": "^22.15.0"

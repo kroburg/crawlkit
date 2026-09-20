@@ -74,7 +74,7 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
       - run: npm ci --prefix node
-      - run: node --test node/test/
+      - run: node --test node/test/*.test.js
 
   node-chrome:
     # Separate from `node` so a Chrome install flake cannot mask a unit failure.
@@ -88,7 +88,7 @@ jobs:
       - uses: browser-actions/setup-chrome@v1
         id: chrome
       - run: npm ci --prefix node
-      - run: node --test node/test/
+      - run: node --test node/test/*.test.js
         env:
           CRAWLKIT_CHROME: ${{ steps.chrome.outputs.chrome-path }}
 

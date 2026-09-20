@@ -3,6 +3,7 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 ROOT="$(cd ../.. && pwd)"
 CK_INGEST="$ROOT/.venv/bin/ck-ingest"
+[ -x "$CK_INGEST" ] || CK_INGEST="$(command -v ck-ingest)"
 
 rm -rf out
 mkdir -p out
