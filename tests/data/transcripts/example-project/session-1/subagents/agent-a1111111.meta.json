@@ -1,0 +1,7 @@
+{
+  "agentType": "general-purpose",
+  "description": "a description that is NOT the id",
+  "model": "some-model",
+  "spawnDepth": 1,
+  "toolUseId": "toolu_x"
+}

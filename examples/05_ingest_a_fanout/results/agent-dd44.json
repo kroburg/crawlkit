@@ -1,0 +1,5 @@
+// verification: 1 of 1 records from http://example.invalid/catalog/cat-2, 2026-09-20. Excluded: none.
+
+```json
+{"item_id": "cat-2", "records": [{"id": "r2", "title": "Cat 2 Record", "source_url": "http://example.invalid/catalog/cat-2"}]}
+```

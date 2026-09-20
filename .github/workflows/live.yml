@@ -1,0 +1,22 @@
+# Never on push. This is what makes the `live` marker honest: it exists, it is
+# off, and there is exactly one button that turns it on.
+#
+# A crawling toolkit whose test suite quietly reaches the public internet is a
+# crawling toolkit that will one day reach it from someone else's CI account.
+
+name: live
+
+on:
+  workflow_dispatch:
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -e '.[dev]'
+      - run: pytest -q -m live
+        env:
+          CRAWLKIT_LIVE: "1"

@@ -1,0 +1,37 @@
+[
+  {
+    "id": "r1",
+    "title": "A Study of Loam Composition",
+    "source_url": "http://example.invalid/catalog/r1",
+    "summary": "The source's own abstract, verbatim.",
+    "access": "ok"
+  },
+  {
+    "id": "r2",
+    "title": "item-42%20details",
+    "source_url": "http://example.invalid/catalog/r2",
+    "summary": null,
+    "access": "ok"
+  },
+  {
+    "id": "r3",
+    "title": "Groundwater Levels, 2024",
+    "source_url": "http://example.invalid/catalog/r3",
+    "summary": null,
+    "access": "ok"
+  },
+  {
+    "id": "r4",
+    "title": "Notes on Riverbank Erosion",
+    "source_url": "http://example.invalid/catalog/r4",
+    "summary": null,
+    "access": "wrong_topic"
+  },
+  {
+    "id": "r5",
+    "title": "Seasonal Rainfall Index",
+    "source_url": "http://example.invalid/catalog/r5",
+    "summary": null,
+    "access": "ok"
+  }
+]

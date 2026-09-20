@@ -1,0 +1,208 @@
+{
+  "_comment": "Single source of truth for every constant shared across modules or runtimes. Python reads it via crawlkit.contract; Node reads this exact file via node/lib/contract.js. tests/test_contract_parity.py fails if the two ever see different bytes.",
+
+  "user_agents": {
+    "desktop_chrome": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+    "_comment": "One registry. Copy-pasting this literal into each script that needs it is the obvious approach, and it drifts: seven copies end up at two different Chrome versions and nothing fails, because nothing compares them. Must never contain the token 'Headless' — crawlkit.ua.assert_no_headless_token() enforces that, because Chrome's new headless mode still emits it and it is the cheapest bot tell there is."
+  },
+
+  "browser": {
+    "branded_chrome": "/usr/bin/google-chrome",
+    "profile_dir_default": ".cache/chrome-profile",
+    "launch_args": [
+      "--no-sandbox",
+      "--disable-blink-features=AutomationControlled",
+      "--window-size=1366,900"
+    ],
+    "offscreen_window_position": "6000,6000",
+    "viewport": { "width": 1280, "height": 800 },
+    "locale": "ru-RU",
+    "_comment": "branded_chrome, not a bundled Chromium: Chromium-for-Testing leaks a different brand set and is fingerprinted. AutomationControlled clears navigator.webdriver. offscreen_window_position lets a real headful window (which passes far more checks than headless) run without stealing desktop focus."
+  },
+
+  "exit_codes": {
+    "ok": 0,
+    "error": 1,
+    "timeout": 2,
+    "challenge_not_cleared": 3,
+    "_comment": "Both runtimes exit with these integers. Documenting a code is not producing one: sys.exit(<str>) prints to stderr and exits 1, so a renderer can promise 2 and 3 and deliver neither, leaving a caller unable to distinguish 'not installed' from 'render failed' from 'wall not cleared'. crawlkit.exits.die() writes the message to stderr and exits the integer."
+  },
+
+  "http": {
+    "live_statuses": [200, 301, 302, 303, 307, 308],
+    "timeout_s": 10,
+    "pdf_timeout_s": 30,
+    "per_host_interval_s": 1.0,
+    "max_parallel_hosts": 32,
+    "failure_sentinel": -1,
+    "_comment": "live_statuses is the set that ends the probe ladder without a GET fallback, and the set a sticky override must fall inside to be trusted. PDFs get the longer timeout because they are slow to first byte and a 10s cap turns a valid response into a false failure."
+  },
+
+  "challenge": {
+    "title_pattern": "just a moment",
+    "poll_attempts": 30,
+    "poll_interval_ms": 2000,
+    "min_body": 2000,
+    "goto_timeout_ms": 90000,
+    "networkidle_timeout_ms": 10000,
+    "_comment": "Two predicates for one mechanism. title_pattern matches Cloudflare's interstitial <title>; min_body is the portable generalization — poll document.body.innerText.length, which survives the challenge's own auto-reload because the predicate re-evaluates in each new document. innerText, never innerHTML: a stub carries kilobytes of obfuscated script and almost no text. Never reload during the poll; a reload restarts the proof-of-work and can escalate to a hard block."
+  },
+
+  "scroll": {
+    "text": { "step_px": 700, "delay_ms": 200, "settle_ms": 2500 },
+    "images": { "step_px": 500, "delay_ms": 150, "settle_ms": 1500 },
+    "_comment": "Re-read document.body.scrollHeight on every iteration — it is the loop bound, so the loop extends as lazy content appends. Caching it is the classic refactor that silently truncates a harvest. The images preset fires more scroll events to trip more lazy image loads."
+  },
+
+  "media": {
+    "min_jpeg_bytes": 10000,
+    "hires_width": 1400,
+    "per_image_timeout_ms": 8000,
+    "drain_ms": 2500,
+    "avatar_url_markers": ["crop_square"],
+    "_comment": "hires_width is requested larger than anything the UI itself asks for, so the injected variant wins the largest-buffer-per-id comparison. drain_ms is required after the in-page injection resolves: CDP response events carrying the buffers arrive asynchronously on the Node side."
+  },
+
+  "politeness": {
+    "attempts": 3,
+    "backoff_s": 30,
+    "attempt_timeout_s": 180,
+    "jitter_lo_s": 11,
+    "jitter_hi_s": 15,
+    "_comment": "Flat backoff, not exponential: 30s is long enough for a transient rate-flag to age out and keeps the worst case bounded. The inter-request sleep is jittered because a constant interval is itself a bot signature. attempt_timeout_s kills a hung browser whose own internal timeouts deadlocked."
+  },
+
+  "qa": {
+    "gray_band": {
+      "bands": 4,
+      "height_start": 0.5,
+      "height_span": 0.45,
+      "strip_px": 4,
+      "samples": 16,
+      "target_level": 128,
+      "mean_tolerance": 4,
+      "variance_max": 30,
+      "min_bad_bands": 2,
+      "_comment": "A truncated JPEG still decodes; the undecoded remainder is flat mid-gray, so only pixel inspection catches it. Lower half only (truncation eats the bottom of a top-down encode). The mean AND variance conjunction is what spares a genuinely flat gray sky; 2-of-4 tolerates one legitimately flat band."
+    }
+  },
+
+  "match": {
+    "floors": {
+      "geo_m": 1500,
+      "token_overlap": 0.05,
+      "_comment": "Two instances of one rule: a best match is not automatically a match. Below the floor the matcher returns nothing and the caller counts it, rather than forcing the nearest candidate."
+    }
+  },
+
+  "sticky": {
+    "marker": "fetch_js",
+    "_comment": "Written into a link-state record by a browser-grade confirmation; read by the cheap prober, which then skips the network entirely for that URL. Honored only in conjunction with a recorded status inside http.live_statuses, so a marker carrying a dead status is still re-probed."
+  },
+
+  "vocabularies": {
+    "_comment": "Closed vocabularies live here once. agents/verdicts.py validates against these values and agents/sections.py renders the in-prompt guide from the same object, filtered by offer_to_agent. That relation (prompt enum is a subset of accepted enum) is therefore structural rather than remembered: maintained as two separate lists, they skew, and the symptom is a whole fanout's worth of rejected records.",
+
+    "content_status": {
+      "ok": { "gloss": "page is live AND contains the claimed fact", "offer_to_agent": true },
+      "wrong_topic": { "gloss": "page is live but is the wrong material (generic landing page, prior-year data, different entity)", "offer_to_agent": true },
+      "js_only": { "gloss": "page is a JavaScript shell — no extractable content for a reader without JS", "offer_to_agent": true },
+      "scanned_pdf": { "gloss": "PDF whose text extraction yields nothing useful (image scan)", "offer_to_agent": true },
+      "unverifiable": { "gloss": "could not fetch: repeated timeouts, domain unreachable; mark and move on", "offer_to_agent": true },
+      "unchecked": { "gloss": "not yet verified by anything", "offer_to_agent": false }
+    },
+
+    "coverage_status": {
+      "ok": { "gloss": "source rendered, items counted, the count is reliable", "offer_to_agent": true },
+      "unparseable": { "gloss": "image-scan PDF, JS shell, paywall, or otherwise not extractable (report a count of 0)", "offer_to_agent": true },
+      "access_blocked": { "gloss": "fetch failed: 403, 503, TLS error, repeated timeouts (report a count of 0)", "offer_to_agent": true },
+      "manual": { "gloss": "derived, never reported by an agent: the measurement could not be made, so coverage is unknown and is NOT scored as passing", "offer_to_agent": false },
+      "undercoverage": { "gloss": "derived: stored count is below the threshold fraction of the source count", "offer_to_agent": false }
+    },
+
+    "verify_verdict": {
+      "confirmed": { "gloss": "independent sources support the claim", "offer_to_agent": true },
+      "refuted": { "gloss": "independent sources contradict the claim", "offer_to_agent": true },
+      "uncertain": { "gloss": "evidence is mixed or stale — return this plus the safest corrected statement", "offer_to_agent": true }
+    },
+
+    "repair_action": {
+      "replace": { "gloss": "a better source exists: return the new URL plus the evidence you saw on it", "offer_to_agent": true },
+      "confirm_walled": { "gloss": "the current URL is right but bot-walled: render it, and if the rendered page genuinely carries the fact, keep the URL", "offer_to_agent": true },
+      "drop": { "gloss": "no acceptable source exists anywhere on the owner's own site: say so in one sentence and the field is removed", "offer_to_agent": true }
+    }
+  },
+
+  "fanout": {
+    "batch_size": 32,
+    "max_concurrent_agents": 10,
+    "emission_rule_width": 78,
+    "marker": "crawlkit-item",
+    "_comment": "max_concurrent_agents is the observed safe band; more trips API rate limiting. emission_rule_width is the '=' rule framing one dispatchable prompt per block. marker is written into every emitted prompt and read back by recovery, so a dead agent's target is recovered from a machine-readable token rather than by regexing prose out of its prompt — and both runtimes must agree on it."
+  },
+
+  "coverage": {
+    "threshold": 0.8,
+    "_comment": "The agent measures, the script judges. This number lives here and never reaches a prompt: an agent that knows what value passes will produce that value. Below the threshold is a real gap worth investigating; the tolerance above it absorbs legitimate declared exclusions."
+  },
+
+  "locales": {
+    "_comment": "A block page is written in the target's language, so matching one is language-specific by nature. Hardcoding a single language at module scope is wrong twice over: it fingerprints where the code was written, and it cannot be extended without editing the module. Default is English; CRAWLKIT_LOCALES=en,ru adds more. Every locale carries the same three categories (empty lists allowed) so a caller can enable one without discovering it is half-populated.",
+
+    "en": {
+      "challenge_markers": [
+        "just a moment",
+        "attention required",
+        "verifying you are human",
+        "are you a robot",
+        "unusual traffic",
+        "captcha"
+      ],
+      "soft_error_markers": [
+        "session has expired",
+        "session expired",
+        "insufficient rights",
+        "access denied",
+        "an error occurred",
+        "page not available"
+      ],
+      "consent_labels": ["I agree", "I accept", "Accept", "Agree", "Allow all", "Got it", "OK"]
+    },
+
+    "ru": {
+      "challenge_markers": ["доступ ограничен", "подозрительн", "проверка браузера"],
+      "soft_error_markers": [
+        "закончилась текущая сессия",
+        "недостаточно прав",
+        "ошибка в параметрах",
+        "доступ запрещен",
+        "сессия истекла"
+      ],
+      "consent_labels": ["Принять", "Согласен", "Хорошо"]
+    },
+
+    "fr": {
+      "challenge_markers": ["un instant", "vérification"],
+      "soft_error_markers": ["session expirée", "accès refusé"],
+      "consent_labels": ["J'accepte", "Accepter", "Tout accepter"]
+    },
+
+    "de": {
+      "challenge_markers": ["einen moment", "überprüfung"],
+      "soft_error_markers": ["sitzung abgelaufen", "zugriff verweigert"],
+      "consent_labels": ["Akzeptieren", "Alle akzeptieren", "Zustimmen"]
+    },
+
+    "es": {
+      "challenge_markers": ["un momento", "verificando"],
+      "soft_error_markers": ["sesión expirada", "acceso denegado"],
+      "consent_labels": ["Aceptar", "Aceptar todo"]
+    },
+
+    "it": {
+      "challenge_markers": ["un momento", "verifica in corso"],
+      "soft_error_markers": ["sessione scaduta", "accesso negato"],
+      "consent_labels": ["Accetta", "Accetta tutto"]
+    }
+  }
+}

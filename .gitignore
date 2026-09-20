@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+node_modules/
+.cache/
+.pytest_cache/
+raw/
+out/
+crawlkit.egg-info/
+.forbidden-names

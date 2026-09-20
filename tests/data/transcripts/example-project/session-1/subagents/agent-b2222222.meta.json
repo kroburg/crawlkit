@@ -1,0 +1,7 @@
+{
+  "agentType": "general-purpose",
+  "description": "harvest item-2",
+  "model": "some-model",
+  "spawnDepth": 1,
+  "toolUseId": "toolu_y"
+}

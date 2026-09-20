@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crawlkit"
+version = "0.1.0"
+description = "Web-harvesting toolkit: bot-wall counters, link probing, agent-fanout harvesting, output QA"
+requires-python = ">=3.12"
+dependencies = []
+
+# The probe/state/agent layers are deliberately dependency-free: they run on a
+# bare interpreter, and tests/test_stdlib_purity.py fails the build if an import
+# creeps in. Only rendering and image QA need anything installed.
+[project.optional-dependencies]
+browser = ["playwright>=1.50"]
+qa = ["pillow>=10"]
+dev = ["pytest>=8", "playwright>=1.50", "pillow>=10", "ruff>=0.6"]
+
+[project.scripts]
+ck-probe = "crawlkit.cli.check_links:main"
+ck-render = "crawlkit.cli.render:main"
+ck-drive = "crawlkit.cli.drive:main"
+ck-plan = "crawlkit.cli.plan:main"
+ck-ingest = "crawlkit.cli.ingest:main"
+ck-recover = "crawlkit.cli.recover:main"
+ck-qa = "crawlkit.cli.qa:main"
+
+[tool.setuptools.packages.find]
+include = ["crawlkit*"]
+
+[tool.setuptools.package-data]
+crawlkit = ["contract/constants.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers"
+markers = [
+    "playwright: needs a rendering browser (skipped when playwright is absent)",
+    "chrome: needs the branded Chrome binary and the Node toolchain",
+    "corpus: needs a local corpus of real harvests; opt in with CRAWLKIT_CORPUS=<dir>",
+    "live: touches a real third-party site; opt in with CRAWLKIT_LIVE=1",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+# A: shadowing `all` is deliberate in crawlkit.contract, whose whole surface is
+# "give me everything"; renaming it to please a linter would be worse naming.
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B011"]

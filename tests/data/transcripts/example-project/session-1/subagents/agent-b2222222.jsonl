@@ -1,0 +1,2 @@
+{"type": "user", "agentId": "b2222222", "message": {"role": "user", "content": "==============================================================================\n# crawlkit-item: item-2  run=run-1\n==============================================================================\n[crawlkit-item: item-2]\nHarvest item-2.\n"}}
+{"type": "assistant", "agentId": "b2222222", "message": {"role": "assistant", "content": [{"type": "text", "text": "Let me fetch."}, {"type": "tool_use", "name": "WebFetch", "input": {"url": "https://example.invalid/x"}}], "stop_reason": "tool_use"}}

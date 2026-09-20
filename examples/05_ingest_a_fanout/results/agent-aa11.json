@@ -1,0 +1,11 @@
+Here is what I was asked to work on, quoted back for my own reference:
+
+```json
+{"echoed_task": "harvest one catalogue item, id cat-1, source http://example.invalid/catalog/cat-1, schema: id str, title str, source_url str, published str or null, authors list of str, summary str or null, keywords list, access str, notes str. Census not sample. Ground every claim."}
+```
+
+And here is my answer:
+
+```json
+{"item_id": "cat-1", "records": [{"id": "r1", "title": "Cat 1 Record"}]}
+```

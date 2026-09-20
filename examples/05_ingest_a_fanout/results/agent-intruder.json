@@ -1,0 +1,7 @@
+A stale agent from an earlier, unrelated fanout. Its reply is well-formed and
+would overwrite good data if directory listing alone were trusted — it is not
+in the --agent-ids list, so it must be rejected outright.
+
+```json
+{"item_id": "cat-2", "records": [{"id": "r9", "title": "should never land"}]}
+```

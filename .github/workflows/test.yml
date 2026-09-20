@@ -1,0 +1,98 @@
+# Every job calls a make target, so a contributor runs exactly what CI runs.
+#
+# The skip classes are dealt with rather than tolerated: `python` installs a
+# browser so the renderer tests actually execute, `node-chrome` installs Chrome
+# so the warm-profile tests do, and `python-bare` exists to make the
+# dependency-free claim real rather than asserted inside a virtualenv that has
+# everything.
+
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -e '.[dev]'
+      - run: ruff check .
+      - run: ruff format --check .
+      # The two guards that decide whether this repo is publishable at all.
+      - run: pytest -q tests/test_no_private_references.py tests/test_console_scripts.py
+
+  python:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "${{ matrix.python }}" }
+      - run: pip install -e '.[dev]'
+      - run: python -m playwright install --with-deps chromium
+      - run: pytest -q -m "not chrome and not live and not corpus"
+
+  python-bare:
+    # No extras. If the probe, state or fanout layers have grown a dependency,
+    # this is where it surfaces — the purity test alone cannot tell, because it
+    # runs in an environment where everything is importable.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -e .
+      - run: pip install pytest
+      - run: pytest -q -m "not playwright and not chrome and not live and not corpus"
+
+  node:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["20", "22"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "${{ matrix.node }}" }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: npm ci --prefix node
+      - run: node --test node/test/
+
+  node-chrome:
+    # Separate from `node` so a Chrome install flake cannot mask a unit failure.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "22" }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - uses: browser-actions/setup-chrome@v1
+        id: chrome
+      - run: npm ci --prefix node
+      - run: node --test node/test/
+        env:
+          CRAWLKIT_CHROME: ${{ steps.chrome.outputs.chrome-path }}
+
+  examples:
+    # Proves the commands in the documentation still work.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "22" }
+      - run: pip install -e '.[dev]'
+      - run: npm ci --prefix node
+      - run: pytest -q tests/test_examples.py

@@ -1,0 +1,311 @@
+{
+  "https://host1.example.invalid/section/1": {
+    "http_status": -1,
+    "last_checked": "2026-01-15",
+    "verdicts": {
+      "home": {
+        "content_status": "ok",
+        "notes": "page renders and carries the claimed fact",
+        "semantic_verified_at": "2026-01-10"
+      }
+    }
+  },
+  "https://host10.example.invalid/section/11": {
+    "http_status": 200,
+    "last_checked": "2026-01-15",
+    "verdicts": {
+      "quota": {
+        "content_status": "ok",
+        "notes": "page renders and carries the claimed fact",
+        "semantic_verified_at": "2026-01-10"
+      }
+    },
+    "verified_via": "fetch_js"
+  },
+  "https://host10.example.invalid/section/27.pdf": {
+    "http_status": 404,
+    "last_checked": "2026-01-15",
+    "verdicts": {
+      "ege": {
+        "content_status": "ok",
+        "notes": "page renders and carries the claimed fact",
+        "semantic_verified_at": "2026-01-10"
+      }
+    }
+  },
+  "https://host11.example.invalid/section/12.pdf": {
+    "http_status": 200,
+    "last_checked": "2026-01-15",
+    "verdicts": {
+      "ege": {
+        "content_status": "ok",
+        "notes": "page renders and carries the claimed fact",
+        "semantic_verified_at": "2026-01-10"
+      }
+    },
+    "verified_via": "fetch_js"
+  },
+  "https://host12.example.invalid/section/13.pdf": {
+    "http_status": 200,
+    "last_checked": "2026-01-15",
+    "verdicts": {
+      "quota": {
+        "content_status": "scanned_pdf",
+        "notes": "image-only PDF; text extraction yields nothing",
+        "semantic_verified_at": "2026-01-10"
+      }
+    }
+  },
+  "https://host12.example.invalid/section/14.pdf": {
+    "http_status": 200,
+    "last_checked": "2026-01-15",
+    "verdicts": {
+      "ege": {
+        "content_status": "scanned_pdf",
+        "notes": "image-only PDF; text extraction yields nothing",
+        "semantic_verified_at": "2026-01-10"
+      }
+    }
+  },
+  "https://host13.example.invalid/section/15": {
+    "http_status": 200,
+    "last_checked": "2026-01-15",
+    "verdicts": {
+      "cutoff": {
+        "content_status": "unverifiable",
+        "notes": "repeated fetch failures; could not confirm either way",
+        "semantic_verified_at": "2026-01-10"
+      },
+      "quota": {
+        "content_status": "unverifiable",
+        "notes": "repeated fetch failures; could not confirm either way",
+        "semantic_verified_at": "2026-01-10"
+      }
+    }
+  },
+  "https://host14.example.invalid/section/16": {
+    "http_status": 200,
+    "last_checked": "2026-01-15",
+    "verdicts": {
+      "ege": {
+        "content_status": "unverifiable",
+        "notes": "repeated fetch failures; could not confirm either way",
+        "semantic_verified_at": "2026-01-10"
+      }
+    }
+  },
+  "https://host15.example.invalid/section/17": {
+    "http_status": 200,
+    "last_checked": "2026-01-15",
+    "verdicts": {
+      "cutoff": {
+        "content_status": "wrong_topic",
+        "notes": "live page, but the wrong material for this claim",
+        "semantic_verified_at": "2026-01-10"
+      }
+    }
+  },
+  "https://host16.example.invalid/section/18": {
+    "http_status": 200,
+    "last_checked": "2026-01-15",
+    "verdicts": {
+      "quota": {
+        "content_status": "wrong_topic",
+        "notes": "live page, but the wrong material for this claim",
+        "semantic_verified_at": "2026-01-10"
+      }
+    }
+  },
+  "https://host17.example.invalid/section/21": {
+    "http_status": 200,
+    "last_checked": "2026-01-15",
+    "verified_via": "fetch_js"
+  },
+  "https://host18.example.invalid/section/22": {
+    "http_status": 202,
+    "last_checked": "2026-01-15",
+    "verdicts": {
+      "home": {
+        "content_status": "ok",
+        "notes": "page renders and carries the claimed fact",
+        "semantic_verified_at": "2026-01-10"
+      }
+    }
+  },
+  "https://host18.example.invalid/section/23": {
+    "http_status": 202,
+    "last_checked": "2026-01-15",
+    "verdicts": {
+      "cutoff": {
+        "content_status": "ok",
+        "notes": "page renders and carries the claimed fact",
+        "semantic_verified_at": "2026-01-10"
+      }
+    }
+  },
+  "https://host19.example.invalid/section/24": {
+    "http_status": 302,
+    "last_checked": "2026-01-15"
+  },
+  "https://host2.example.invalid/section/2": {
+    "http_status": -1,
+    "last_checked": "2026-01-15",
+    "verdicts": {
+      "home": {
+        "content_status": "ok",
+        "notes": "page renders and carries the claimed fact",
+        "semantic_verified_at": "2026-01-10"
+      }
+    }
+  },
+  "https://host20.example.invalid/section/25": {
+    "http_status": 403,
+    "last_checked": "2026-01-15"
+  },
+  "https://host21.example.invalid/section/26": {
+    "http_status": 403,
+    "last_checked": "2026-01-15"
+  },
+  "https://host22.example.invalid/section/28.pdf": {
+    "http_status": 404,
+    "last_checked": "2026-01-15",
+    "verdicts": {
+      "quota": {
+        "content_status": "ok",
+        "notes": "page renders and carries the claimed fact",
+        "semantic_verified_at": "2026-01-10"
+      }
+    }
+  },
+  "https://host23.example.invalid/section/29.pdf": {
+    "http_status": 404,
+    "last_checked": "2026-01-15",
+    "verdicts": {
+      "quota": {
+        "content_status": "scanned_pdf",
+        "notes": "image-only PDF; text extraction yields nothing",
+        "semantic_verified_at": "2026-01-10"
+      }
+    }
+  },
+  "https://host24.example.invalid/section/32": {
+    "http_status": 405,
+    "last_checked": "2026-01-15"
+  },
+  "https://host25.example.invalid/section/33": {
+    "http_status": 502,
+    "last_checked": "2026-01-15"
+  },
+  "https://host25.example.invalid/section/34": {
+    "http_status": 502,
+    "last_checked": "2026-01-15"
+  },
+  "https://host26.example.invalid/section/35": {
+    "http_status": 503,
+    "last_checked": "2026-01-15"
+  },
+  "https://host26.example.invalid/section/36": {
+    "http_status": 503,
+    "last_checked": "2026-01-15"
+  },
+  "https://host3.example.invalid/section/3": {
+    "http_status": -1,
+    "last_checked": "2026-01-15"
+  },
+  "https://host3.example.invalid/section/4": {
+    "http_status": -1,
+    "last_checked": "2026-01-15"
+  },
+  "https://host4.example.invalid/section/30": {
+    "http_status": 404,
+    "last_checked": "2026-01-15"
+  },
+  "https://host4.example.invalid/section/31": {
+    "http_status": 404,
+    "last_checked": "2026-01-15"
+  },
+  "https://host4.example.invalid/section/5": {
+    "http_status": 200,
+    "last_checked": "2026-01-15",
+    "verdicts": {
+      "quota": {
+        "content_status": "js_only",
+        "notes": "client-rendered shell; no extractable content without JS",
+        "semantic_verified_at": "2026-01-10"
+      }
+    }
+  },
+  "https://host5.example.invalid/section/6": {
+    "http_status": 200,
+    "last_checked": "2026-01-15",
+    "verdicts": {
+      "unused": {
+        "content_status": "js_only",
+        "notes": "client-rendered shell; no extractable content without JS",
+        "semantic_verified_at": "2026-01-10"
+      }
+    }
+  },
+  "https://host6.example.invalid/section/7": {
+    "http_status": 200,
+    "last_checked": "2026-01-15",
+    "verdicts": {
+      "cutoff": {
+        "content_status": "wrong_topic",
+        "notes": "live page, but the wrong material for this claim",
+        "semantic_verified_at": "2026-01-10"
+      },
+      "quota": {
+        "content_status": "ok",
+        "notes": "page renders and carries the claimed fact",
+        "semantic_verified_at": "2026-01-10"
+      }
+    }
+  },
+  "https://host7.example.invalid/section/8": {
+    "http_status": 200,
+    "last_checked": "2026-01-15",
+    "verdicts": {
+      "cutoff": {
+        "content_status": "wrong_topic",
+        "notes": "live page, but the wrong material for this claim",
+        "semantic_verified_at": "2026-01-10"
+      },
+      "ege": {
+        "content_status": "ok",
+        "notes": "page renders and carries the claimed fact",
+        "semantic_verified_at": "2026-01-10"
+      }
+    }
+  },
+  "https://host8.example.invalid/section/19": {
+    "http_status": 200,
+    "last_checked": "2026-01-15"
+  },
+  "https://host8.example.invalid/section/20": {
+    "http_status": 200,
+    "last_checked": "2026-01-15"
+  },
+  "https://host8.example.invalid/section/9": {
+    "http_status": 200,
+    "last_checked": "2026-01-15",
+    "verdicts": {
+      "ege": {
+        "content_status": "ok",
+        "notes": "page renders and carries the claimed fact",
+        "semantic_verified_at": "2026-01-10"
+      }
+    }
+  },
+  "https://host9.example.invalid/section/10": {
+    "http_status": 200,
+    "last_checked": "2026-01-15",
+    "verdicts": {
+      "quota": {
+        "content_status": "ok",
+        "notes": "page renders and carries the claimed fact",
+        "semantic_verified_at": "2026-01-10"
+      }
+    }
+  }
+}
